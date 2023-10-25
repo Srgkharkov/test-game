@@ -1,0 +1,144 @@
+openapi: 3.1.0
+info:
+  title: Swagger Test Game - OpenAPI 3.1
+  contact:
+    email: srgkharkov@gmail.com
+  version: 1.0.11
+servers:
+- url: /
+tags:
+- name: configs
+  description: Upload configs
+- name: result
+  description: Access to Petstore orders
+- name: metrics
+  description: Метрические данные в формате prometheus
+paths:
+  /configs:
+    post:
+      tags:
+      - configs
+      summary: Add a new config
+      description: Add a new config
+      operationId: addConfig
+      requestBody:
+        description: Create a new config
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Config'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Config'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Config'
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        "405":
+          description: Invalid input
+  /result:
+    get:
+      tags:
+      - result
+      summary: "Returns result by reels, lines and payouts configs"
+      description: Returns a JSON with payouts for every lines and total
+      operationId: getResult
+      parameters:
+      - name: conf_reel_name
+        in: query
+        description: Name of reel config
+        required: true
+        style: form
+        explode: true
+        schema: {}
+      - name: conf_line_name
+        in: query
+        description: Name of line config
+        required: true
+        style: form
+        explode: true
+        schema: {}
+      - name: conf_payout_name
+        in: query
+        description: Name of payout config
+        required: true
+        style: form
+        explode: true
+        schema: {}
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Result'
+  /metrics:
+    get:
+      tags:
+      - metrics
+      summary: "Returns result by reels, lines and payouts configs"
+      description: Returns a JSON with payouts for every lines and total
+      operationId: getMetrics
+      responses:
+        "200":
+          description: successful operation
+          content: {}
+components:
+  schemas:
+    Config:
+      required:
+      - JSON
+      - name
+      - type
+      properties:
+        id:
+          format: int64
+        name: {}
+        type:
+          enum:
+          - reels
+          - lines
+          - payouts
+        JSON: {}
+      xml:
+        name: config
+    ApiResponse:
+      properties:
+        id:
+          format: int64
+        message: {}
+      example:
+        id: ""
+        message: ""
+      xml:
+        name: '##default'
+    Result:
+      properties:
+        id:
+          format: int64
+        JSON: {}
+      example:
+        JSON: ""
+        id: ""
+      xml:
+        name: result
+  requestBodies:
+    Config:
+      description: Config object that needs to be added
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Config'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Config'
