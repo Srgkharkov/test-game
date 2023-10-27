@@ -13,7 +13,21 @@ import (
 	"github.com/golang/gddo/httputil/header"
 )
 
-func AddConfig(w http.ResponseWriter, r *http.Request) {
+// AddConfig godoc
+// @Summary      Add config
+// @Description  get string by ID
+// @Tags         configs
+// @Accept       mpfd
+// @Produce      json
+// @Param        conftype   confname      config
+// @Success      200  {string}  OK
+// @Failure      400  {object}  httputil.HTTPError
+// @Failure      415  {object}  httputil.HTTPError
+// @Failure      500  {object}  httputil.HTTPError
+// @Router       /addconfig [post]
+
+func (h *APIHandler) AddConfig(w http.ResponseWriter, r *http.Request) {
+	(*h.metrics.RequestsTotal).Inc()
 	// If the Content-Type header is present, check that it has the value
 	// multipart/form-data. Note that we are using the gddo/httputil/header
 	// package to parse and extract the value here, so the check works
@@ -24,6 +38,7 @@ func AddConfig(w http.ResponseWriter, r *http.Request) {
 		if value != "multipart/form-data" {
 			msg := "Content-Type header is not multipart/form-data"
 			http.Error(w, msg, http.StatusUnsupportedMediaType)
+			(*h.metrics.ErrorResponseTotal).Inc()
 			return
 		}
 	}
@@ -36,12 +51,14 @@ func AddConfig(w http.ResponseWriter, r *http.Request) {
 	conftype := r.FormValue("conftype")
 	if conftype == "" {
 		http.Error(w, "Not found type of config", http.StatusBadRequest)
+		(*h.metrics.ErrorResponseTotal).Inc()
 		return
 	}
 
 	confname := r.FormValue("confname")
 	if confname == "" {
 		http.Error(w, "Not found name config", http.StatusBadRequest)
+		(*h.metrics.ErrorResponseTotal).Inc()
 		return
 	}
 
@@ -54,6 +71,7 @@ func AddConfig(w http.ResponseWriter, r *http.Request) {
 	conffile, _, err := r.FormFile("config")
 	if err != nil {
 		http.Error(w, "Bad or not found file config", http.StatusBadRequest)
+		(*h.metrics.ErrorResponseTotal).Inc()
 		return
 	}
 	defer conffile.Close()
@@ -69,6 +87,7 @@ func AddConfig(w http.ResponseWriter, r *http.Request) {
 		err = decoder.Decode(&field)
 		if err != nil {
 			http.Error(w, "Bad file config, I can`t decode JSON", http.StatusBadRequest)
+			(*h.metrics.ErrorResponseTotal).Inc()
 			return
 		}
 
@@ -82,8 +101,9 @@ func AddConfig(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 
-		if err := ga.Configs_reels.AddConfig(&Config_reels); err != nil {
+		if err := h.game.Configs_reels.AddConfig(&Config_reels); err != nil {
 			http.Error(w, "Internal error, Can`t add Config", http.StatusInternalServerError)
+			(*h.metrics.ErrorResponseTotal).Inc()
 			return
 		}
 
@@ -94,10 +114,12 @@ func AddConfig(w http.ResponseWriter, r *http.Request) {
 		err = decoder.Decode(&Config_lines.Lines)
 		if err != nil {
 			http.Error(w, "Bad file config, I can`t decode JSON", http.StatusBadRequest)
+			(*h.metrics.ErrorResponseTotal).Inc()
 			return
 		}
-		if err := ga.Configs_lines.AddConfig(&Config_lines); err != nil {
+		if err := h.game.Configs_lines.AddConfig(&Config_lines); err != nil {
 			http.Error(w, "Internal error, Can`t add Config", http.StatusInternalServerError)
+			(*h.metrics.ErrorResponseTotal).Inc()
 			return
 		}
 
@@ -122,6 +144,7 @@ func AddConfig(w http.ResponseWriter, r *http.Request) {
 		err = decoder.Decode(&JSONPayouts)
 		if err != nil {
 			http.Error(w, "Bad file config, I can`t decode JSON", http.StatusBadRequest)
+			(*h.metrics.ErrorResponseTotal).Inc()
 			return
 		}
 
@@ -139,23 +162,33 @@ func AddConfig(w http.ResponseWriter, r *http.Request) {
 
 		Config_payouts.Payouts = Payouts
 
-		if err := ga.Configs_payouts.AddConfig(&Config_payouts); err != nil {
+		if err := h.game.Configs_payouts.AddConfig(&Config_payouts); err != nil {
 			http.Error(w, "Internal error, Can`t add Config", http.StatusInternalServerError)
+			(*h.metrics.ErrorResponseTotal).Inc()
 			return
 		}
 	}
 
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	fmt.Fprint(w, "OK")
 	w.WriteHeader(http.StatusOK)
 }
 
-func GetMetrics(w http.ResponseWriter, r *http.Request) {
-	//promhttp.h
-	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	w.WriteHeader(http.StatusOK)
-}
-
-func GetResult(w http.ResponseWriter, r *http.Request) {
+// GetResult godoc
+// @Summary      Get result
+// @Description  get result by Config reels name, Config lines name and Config payouts name
+// @Tags         result
+// @Accept       json
+// @Produce      json
+// @Param        conf_reels_name   conf_lines_name      conf_payouts_name
+// @Success      200  {string}  OK
+// @Failure      400  {object}  httputil.HTTPError
+// @Failure      413  {object}  httputil.HTTPError
+// @Failure      415  {object}  httputil.HTTPError
+// @Failure      500  {object}  httputil.HTTPError
+// @Router       /getresult [get]
+func (h *APIHandler) GetResult(w http.ResponseWriter, r *http.Request) {
+	(*h.metrics.RequestsTotal).Inc()
 	// If the Content-Type header is present, check that it has the value
 	// application/json. Note that we are using the gddo/httputil/header
 	// package to parse and extract the value here, so the check works
@@ -166,6 +199,7 @@ func GetResult(w http.ResponseWriter, r *http.Request) {
 		if value != "application/json" {
 			msg := "Content-Type header is not application/json"
 			http.Error(w, msg, http.StatusUnsupportedMediaType)
+			(*h.metrics.ErrorResponseTotal).Inc()
 			return
 		}
 	}
@@ -242,18 +276,21 @@ func GetResult(w http.ResponseWriter, r *http.Request) {
 			log.Print(err.Error())
 			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		}
+		(*h.metrics.ErrorResponseTotal).Inc()
 		return
 	}
 
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	result, err := ga.GetResult(&ReqResult)
+	result, err := h.game.GetResult(&ReqResult)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
+		(*h.metrics.ErrorResponseTotal).Inc()
 		return
 	}
 	bresult, err := json.Marshal(result)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
+		(*h.metrics.ErrorResponseTotal).Inc()
 		return
 	}
 	w.Write(bresult)

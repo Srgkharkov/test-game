@@ -1,5 +1,6 @@
 build:
-	go build -o stringifier ./cmd/main.go
+	go build -o ./bin/app ./cmd/main.go
+	./bin/app
 
 run:
-	go run -race main.go
+	go run ./cmd/main.go

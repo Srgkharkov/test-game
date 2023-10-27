@@ -5,9 +5,9 @@ import (
 )
 
 type Metrics struct {
-	requestsTotal      *prometheus.Counter
-	errorResponseTotal *prometheus.Counter
-	requestDuration    *prometheus.Histogram
+	RequestsTotal      *prometheus.Counter
+	ErrorResponseTotal *prometheus.Counter
+	RequestDuration    *prometheus.Histogram
 }
 
 func NewMetrics() *Metrics {
@@ -31,13 +31,12 @@ func NewMetrics() *Metrics {
 	)
 
 	return &Metrics{
-		requestsTotal:      &requestsTotal,
-		errorResponseTotal: &errorResponseTotal,
-		requestDuration:    &requestDuration,
+		RequestsTotal:      &requestsTotal,
+		ErrorResponseTotal: &errorResponseTotal,
+		RequestDuration:    &requestDuration,
 	}
 }
 
 func (m *Metrics) Run() {
-	prometheus.MustRegister(*m.requestsTotal, *m.errorResponseTotal, *m.requestDuration)
-
+	prometheus.MustRegister(*m.RequestsTotal, *m.ErrorResponseTotal, *m.RequestDuration)
 }

@@ -1,19 +1,18 @@
 package main
 
 import (
-	app "github.com/Srgkharkov/test-game/internal/app"
+	"github.com/Srgkharkov/test-game/internal/apiserver"
+	"github.com/Srgkharkov/test-game/internal/game"
+	"github.com/Srgkharkov/test-game/internal/metrics"
 	"log"
 )
 
 func main() {
-	app := app.NewApp()
-	app.Metrics.Run()
-	if err := app.APIServer.Run(); err != nil {
+	game := game.NewGame()
+	metrics := metrics.NewMetrics()
+	metrics.Run()
+	APIServer := apiserver.NewAPIServer(game, metrics)
+	if err := APIServer.Run(); err != nil {
 		log.Fatal(err)
 	}
-
-	//router := sw.NewRouter()
-	//
-	//log.Fatal(http.ListenAndServe(":8080", router))
-
 }
