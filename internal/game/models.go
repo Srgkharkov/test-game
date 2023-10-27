@@ -37,7 +37,7 @@ type Configs_payouts struct {
 
 type Config_payouts struct {
 	Name     string
-	Payouts  []*Payouts
+	Payouts  []Payouts
 	mPayouts map[rune]*Payouts
 }
 
@@ -48,11 +48,17 @@ type Payouts struct {
 
 type Result struct {
 	symbols [][]rune
-	Lines   []*LineResult `json:"lines"`
-	Total   int           `json:"total"`
+	Lines   []LineResult `json:"lines"`
+	Total   int          `json:"total"`
 }
 
 type LineResult struct {
 	Line   int `json:"line"`
 	Payout int `json:"payout"`
+}
+
+type ReqResult struct {
+	Config_reels_name   string `json:"conf_reels_name"`
+	Config_lines_name   string `json:"conf_lines_name"`
+	Config_payouts_name string `json:"conf_payouts_name"`
 }

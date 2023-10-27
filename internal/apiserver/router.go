@@ -2,6 +2,7 @@ package apiserver
 
 import (
 	"fmt"
+	"github.com/Srgkharkov/test-game/internal/game"
 	"github.com/gorilla/mux"
 	"net/http"
 	"strings"
@@ -14,10 +15,14 @@ type Route struct {
 	HandlerFunc http.HandlerFunc
 }
 
+var ga *game.Game
+
 type Routes []Route
 
-func NewRouter() *mux.Router {
+func NewRouter(g *game.Game) *mux.Router {
+	ga = g
 	router := mux.NewRouter().StrictSlash(true)
+	//router.han
 	for _, route := range routes {
 		var handler http.Handler
 		handler = route.HandlerFunc
@@ -61,7 +66,7 @@ var routes = Routes{
 
 	Route{
 		"GetResult",
-		strings.ToUpper("Get"),
+		strings.ToUpper("Post"),
 		"/getresult",
 		GetResult,
 	},

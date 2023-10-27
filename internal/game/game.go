@@ -1,6 +1,9 @@
 package game
 
-import "errors"
+import (
+	"encoding/json"
+	"errors"
+)
 
 type Game struct {
 	Configs_reels   *Configs_reels
@@ -36,6 +39,11 @@ func (c *Configs_reels) AddConfig(Config_reels *Config_reels) error {
 	return nil
 }
 
+func (c *Config_reels) UnmarshalJSON(b []byte) error {
+	//a := []interface{}{&t.count, &t.name, &t.relation}
+	return json.Unmarshal(b, &c)
+}
+
 func (c *Configs_lines) AddConfig(Config_lines *Config_lines) error {
 	if _, ok := c.Map[Config_lines.Name]; ok {
 		return errors.New("This config already exists")
@@ -52,7 +60,7 @@ func (c *Configs_payouts) AddConfig(Config_payouts *Config_payouts) error {
 
 	Config_payouts.mPayouts = make(map[rune]*Payouts)
 	for i := 0; i < len(Config_payouts.Payouts); i++ {
-		Config_payouts.mPayouts[Config_payouts.Payouts[i].Symbol] = Config_payouts.Payouts[i]
+		Config_payouts.mPayouts[Config_payouts.Payouts[i].Symbol] = &Config_payouts.Payouts[i]
 	}
 
 	c.Configs = append(c.Configs, Config_payouts)
@@ -61,29 +69,30 @@ func (c *Configs_payouts) AddConfig(Config_payouts *Config_payouts) error {
 	return nil
 }
 
-func (g *Game) GetResult(Configname_reels, Configname_lines, Configname_payouts string) (*Result, error) {
-	Config_reels, ok := g.Configs_reels.Map[Configname_reels]
+func (g *Game) GetResult(ReqResult *ReqResult) (*Result, error) {
+	//func (g *Game) GetResult(Configname_reels, Configname_lines, Configname_payouts string) (*Result, error) {
+	Config_reels, ok := g.Configs_reels.Map[ReqResult.Config_reels_name]
 	if !ok {
 		return nil, errors.New("Config reels not exists")
 	}
 
-	Config_lines, ok := g.Configs_lines.Map[Configname_lines]
+	Config_lines, ok := g.Configs_lines.Map[ReqResult.Config_lines_name]
 	if !ok {
 		return nil, errors.New("Config lines not exists")
 	}
 
-	Config_payouts, ok := g.Configs_payouts.Map[Configname_payouts]
+	Config_payouts, ok := g.Configs_payouts.Map[ReqResult.Config_payouts_name]
 	if !ok {
 		return nil, errors.New("Config payouts not exists")
 	}
 	var Result Result
 
 	Result.symbols = make([][]rune, len(Config_lines.Lines))
-	Result.Lines = make([]*LineResult, len(Config_lines.Lines))
+	Result.Lines = make([]LineResult, len(Config_lines.Lines))
 
 	for i := 0; i < len(Config_lines.Lines); i++ {
 
-		Line := Config_lines.Lines[i]
+		Line := *Config_lines.Lines[i]
 		Result.symbols[i] = make([]rune, len(Line.Positions))
 		Result.Lines[i].Line = Line.Number
 
