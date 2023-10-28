@@ -58,13 +58,7 @@ func NewRouter(game *game.Game, metrics *metrics.Metrics) *mux.Router {
 	for _, route := range routes {
 		var handler http.Handler
 		handler = route.HandlerFunc
-		//handler = h.Logger(handler, route.Name)
 		handler = h.Observer(handler)
-		//handler = promhttp.Handler()
-		//handler = route.HandlerFunc
-		//if route.UseCounter {
-		//	handler = h.Logger(handler, route.Name)
-		//}
 
 		router.
 			Methods(route.Method).

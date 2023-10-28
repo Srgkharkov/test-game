@@ -10,7 +10,8 @@
 ## Getting Started
 
 Test Reels Game requires [Golang](https://go.dev/doc/install) v1.21+ to run.
-Needs exec commands:
+
+
 ```sh
 git clone github.com/Srgkharkov/test-game
 make build
@@ -46,8 +47,7 @@ Dockerfile if necessary. When ready, simply use the Dockerfile to
 build the image.
 
 ```sh
-cd dillinger
-docker build -t <containername> .
+docker build -t img-test-game .
 ```
 
 This will create the Test Reels Game image and pull in the necessary dependencies.
@@ -57,7 +57,7 @@ your host. In this example, we simply map port 80 of the host to
 port 8080 of the Docker (or whatever port was exposed in the Dockerfile):
 
 ```sh
-docker run -p 80:8080 --restart=always --name=test-game <containername>
+docker run -p 80:8080 --restart=always --name=test-game img-test-game
 ```
 
 Verify the deployment by navigating to your server address in
@@ -67,13 +67,35 @@ your preferred browser.
 127.0.0.1/metrics
 ```
 
+## API Endpoints
+| HTTP Verbs | Endpoints            | Action                                                                            | Content type        |
+|------------|----------------------|-----------------------------------------------------------------------------------|---------------------|
+| POST       | /addconfig           | To adding configs(Config_reels, Config_lines or Config_payouts)                   | multipart/form-data |
+| POST       | /getresult           | To getting result by Config_reels_name, Config_lines_name and Config_payouts_name | application/json    |
+| GET        | /metrics             | To retrieve prometheus metrics                                                    |                     |
+
+### /addconfig
+| Name     | Type | Value                                                                                                  |
+|----------|------|--------------------------------------------------------------------------------------------------------|
+| conftype | Key  | "reels", "lines" or "payouts"                                                                          |
+| confname | Key  | Name of config                                                                                         |
+| config   | File | A file containing JSON, for example: test/confreels.json, test/conflines.json or test/confpayouts.json |
+
+### /getresult
+```json
+{
+    "conf_reels_name" : "confreels_1",
+    "conf_lines_name" : "conflines_1",
+    "conf_payouts_name" : "confpayouts_1"
+}
+```
 ## License
 
 MIT
 
 **Free Software, Hell Yeah!**
 
-## Tech
+
 
 Dillinger uses a number of open source projects to work properly:
 
