@@ -13,19 +13,6 @@ import (
 	"github.com/golang/gddo/httputil/header"
 )
 
-// AddConfig godoc
-// @Summary      Add config
-// @Description  get string by ID
-// @Tags         configs
-// @Accept       mpfd
-// @Produce      json
-// @Param        conftype   confname      config
-// @Success      200  {string}  OK
-// @Failure      400  {object}  httputil.HTTPError
-// @Failure      415  {object}  httputil.HTTPError
-// @Failure      500  {object}  httputil.HTTPError
-// @Router       /addconfig [post]
-
 func (h *APIHandler) AddConfig(w http.ResponseWriter, r *http.Request) {
 	(*h.metrics.RequestsTotal).Inc()
 	// If the Content-Type header is present, check that it has the value
@@ -48,15 +35,15 @@ func (h *APIHandler) AddConfig(w http.ResponseWriter, r *http.Request) {
 	// Decode() returning a "http: request body too large" error.
 	r.ParseMultipartForm(128 << 10)
 
-	conftype := r.FormValue("conftype")
-	if conftype == "" {
+	configType := r.FormValue("configType")
+	if configType == "" {
 		http.Error(w, "Not found type of config", http.StatusBadRequest)
 		(*h.metrics.ErrorResponseTotal).Inc()
 		return
 	}
 
-	confname := r.FormValue("confname")
-	if confname == "" {
+	configName := r.FormValue("configName")
+	if configName == "" {
 		http.Error(w, "Not found name config", http.StatusBadRequest)
 		(*h.metrics.ErrorResponseTotal).Inc()
 		return
@@ -76,10 +63,10 @@ func (h *APIHandler) AddConfig(w http.ResponseWriter, r *http.Request) {
 	}
 	defer conffile.Close()
 
-	switch conftype {
+	switch configType {
 	case "reels":
 		var Config_reels game.Config_reels
-		Config_reels.Name = confname
+		Config_reels.Name = configName
 
 		var field [3][5]string
 
@@ -109,7 +96,7 @@ func (h *APIHandler) AddConfig(w http.ResponseWriter, r *http.Request) {
 
 	case "lines":
 		var Config_lines game.Config_lines
-		Config_lines.Name = confname
+		Config_lines.Name = configName
 		decoder := json.NewDecoder(conffile)
 		err = decoder.Decode(&Config_lines.Lines)
 		if err != nil {
@@ -138,7 +125,7 @@ func (h *APIHandler) AddConfig(w http.ResponseWriter, r *http.Request) {
 		//}
 
 		var Config_payouts game.Config_payouts
-		Config_payouts.Name = confname
+		Config_payouts.Name = configName
 
 		decoder := json.NewDecoder(conffile)
 		err = decoder.Decode(&JSONPayouts)

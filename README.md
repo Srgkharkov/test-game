@@ -78,11 +78,11 @@ your preferred browser.
 ### POST Request /addconfig
 Body must containt three arduments:
 
-| Name     | Type | Value                                                                                                  |
-|----------|------|--------------------------------------------------------------------------------------------------------|
-| conftype | Key  | "reels", "lines" or "payouts"                                                                          |
-| confname | Key  | Name of config                                                                                         |
-| config   | File | A file containing JSON, for example: test/confreels.json, test/conflines.json or test/confpayouts.json |
+| Name       | Type | Value                                                                                                  |
+|------------|------|--------------------------------------------------------------------------------------------------------|
+| configType | Key  | "reels", "lines" or "payouts"                                                                          |
+| configName | Key  | Name of config                                                                                         |
+| config     | File | A file containing JSON, for example: test/confreels.json, test/conflines.json or test/confpayouts.json |
 
 ### POST Request /getresult
 Body must containt JSON:

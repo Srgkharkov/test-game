@@ -15,10 +15,10 @@ import (
 )
 
 type config struct {
-	path      string
-	KeyValues [][2]string
-	conftype  string
-	confname  string
+	path       string
+	KeyValues  [][2]string
+	configType string
+	configName string
 }
 
 func TestAPIHandlers(t *testing.T) {
@@ -37,22 +37,22 @@ func TestAPIHandlers(t *testing.T) {
 	configs := []config{
 		{
 			KeyValues: [][2]string{
-				{"conftype", "reels"},
-				{"confname", "confreels_1"},
+				{"configType", "reels"},
+				{"configName", "confreels_1"},
 			},
 			path: "../../test/confreels.json",
 		},
 		{
 			KeyValues: [][2]string{
-				{"conftype", "lines"},
-				{"confname", "conflines_1"},
+				{"configType", "lines"},
+				{"configName", "conflines_1"},
 			},
 			path: "../../test/conflines.json",
 		},
 		{
 			KeyValues: [][2]string{
-				{"conftype", "payouts"},
-				{"confname", "confpayouts_1"},
+				{"configType", "payouts"},
+				{"configName", "confpayouts_1"},
 			},
 			path: "../../test/confpayouts.json",
 		},
