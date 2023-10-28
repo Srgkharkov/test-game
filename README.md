@@ -88,9 +88,9 @@ Body must containt three arduments:
 Body must containt JSON:
 ```json
 {
-    "conf_reels_name" : "confreels_1",
-    "conf_lines_name" : "conflines_1",
-    "conf_payouts_name" : "confpayouts_1"
+    "config_reels_name" : "confreels_1",
+    "config_lines_name" : "conflines_1",
+    "config_payouts_name" : "confpayouts_1"
 }
 ```
 ## License

@@ -95,7 +95,7 @@ func TestAPIHandlers(t *testing.T) {
 
 	}
 
-	var jsonStr = []byte(`{"conf_reels_name":"confreels_1", "conf_lines_name":"conflines_1", "conf_payouts_name":"confpayouts_1"}`)
+	var jsonStr = []byte(`{"config_reels_name":"confreels_1", "config_lines_name":"conflines_1", "config_payouts_name":"confpayouts_1"}`)
 	request, err := http.NewRequest("POST", urlgetresult, bytes.NewBuffer(jsonStr))
 	//req.Header.Set("X-Custom-Header", "myvalue")
 	request.Header.Set("Content-Type", "application/json")

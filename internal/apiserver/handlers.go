@@ -13,6 +13,9 @@ import (
 	"github.com/golang/gddo/httputil/header"
 )
 
+// The AddConfig method handles a request that contains data in the multipart/form-data format in its body.
+// The request should include parameters such as configType, configName, and the config file.
+// It then passes this data to the 'game' package's corresponding function.
 func (h *APIHandler) AddConfig(w http.ResponseWriter, r *http.Request) {
 	(*h.metrics.RequestsTotal).Inc()
 	// If the Content-Type header is present, check that it has the value
@@ -48,12 +51,6 @@ func (h *APIHandler) AddConfig(w http.ResponseWriter, r *http.Request) {
 		(*h.metrics.ErrorResponseTotal).Inc()
 		return
 	}
-
-	//conftext := r.FormValue("conftext")
-	//if conftext == "" {
-	//	http.Error(w, "Not found config text", http.StatusBadRequest)
-	//	return
-	//}
 
 	conffile, _, err := r.FormFile("config")
 	if err != nil {
@@ -118,12 +115,6 @@ func (h *APIHandler) AddConfig(w http.ResponseWriter, r *http.Request) {
 
 		var JSONPayouts []*tPayouts
 
-		//type tConfig_payouts struct {
-		//	Name     string
-		//	Payouts  []*tPayouts
-		//	mPayouts map[rune]*tPayouts
-		//}
-
 		var Config_payouts game.Config_payouts
 		Config_payouts.Name = configName
 
@@ -138,8 +129,6 @@ func (h *APIHandler) AddConfig(w http.ResponseWriter, r *http.Request) {
 		Payouts := make([]game.Payouts, len(JSONPayouts))
 
 		for i, v := range JSONPayouts {
-			//Payouts[i].Payout = make([]int, len(v.Payout))
-			//copy(Config_payouts.Payouts[i].Payout, v.Payout)
 			Payouts[i].Payout = v.Payout
 			for _, c := range v.Symbol {
 				Payouts[i].Symbol = c
@@ -161,19 +150,10 @@ func (h *APIHandler) AddConfig(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
-// GetResult godoc
-// @Summary      Get result
-// @Description  get result by Config reels name, Config lines name and Config payouts name
-// @Tags         result
-// @Accept       json
-// @Produce      json
-// @Param        conf_reels_name   conf_lines_name      conf_payouts_name
-// @Success      200  {string}  OK
-// @Failure      400  {object}  httputil.HTTPError
-// @Failure      413  {object}  httputil.HTTPError
-// @Failure      415  {object}  httputil.HTTPError
-// @Failure      500  {object}  httputil.HTTPError
-// @Router       /getresult [get]
+// The GetResult method processes a POST request with JSON data in the application/json format in its body.
+// The request should include parameters such as conf_reels_name, conf_lines_name, and conf_payouts_name.
+// It then returns the result in the application/json format, structured as follows:
+// {"lines":[{"line":1,"payout":50},{"line":2,"payout":0},{"line":3,"payout":0}],"total":50}"
 func (h *APIHandler) GetResult(w http.ResponseWriter, r *http.Request) {
 	(*h.metrics.RequestsTotal).Inc()
 	// If the Content-Type header is present, check that it has the value

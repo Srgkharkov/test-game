@@ -8,9 +8,10 @@ type Game struct {
 	Configs_reels   *Configs_reels
 	Configs_lines   *Configs_lines
 	Configs_payouts *Configs_payouts
-	//Result *Result
 }
 
+// The NewGame function initializes the Game structure, which stores the
+// configurations for Configs_reels, Configs_lines, and Configs_payouts.
 func NewGame() *Game {
 	return &Game{
 		Configs_reels: &Configs_reels{
@@ -25,10 +26,11 @@ func NewGame() *Game {
 			Configs: make([]*Config_payouts, 0),
 			Map:     make(map[string]*Config_payouts),
 		},
-		//Result: &Result{},
 	}
 }
 
+// The AddConfig method takes a Config_reels, checks for the existence of the configuration.
+// If it doesn't exist, it is saved; otherwise, it returns an error.
 func (c *Configs_reels) AddConfig(Config_reels *Config_reels) error {
 	if _, ok := c.Map[Config_reels.Name]; ok {
 		return errors.New("This config already exists")
@@ -38,6 +40,8 @@ func (c *Configs_reels) AddConfig(Config_reels *Config_reels) error {
 	return nil
 }
 
+// The AddConfig method takes a Config_lines, checks for the existence of the configuration.
+// If it doesn't exist, it is saved; otherwise, it returns an error.
 func (c *Configs_lines) AddConfig(Config_lines *Config_lines) error {
 	if _, ok := c.Map[Config_lines.Name]; ok {
 		return errors.New("This config already exists")
@@ -47,6 +51,8 @@ func (c *Configs_lines) AddConfig(Config_lines *Config_lines) error {
 	return nil
 }
 
+// The AddConfig method takes a Config_payouts, checks for the existence of the configuration.
+// If it doesn't exist, it is saved; otherwise, it returns an error.
 func (c *Configs_payouts) AddConfig(Config_payouts *Config_payouts) error {
 	if _, ok := c.Map[Config_payouts.Name]; ok {
 		return errors.New("This config already exists")
@@ -63,8 +69,10 @@ func (c *Configs_payouts) AddConfig(Config_payouts *Config_payouts) error {
 	return nil
 }
 
+// The GetResult method takes a ReqResult structure, which contains the names of configurations:
+// Config_reels_name, Config_lines_name, and Config_payouts_name.
+// It locates the required configurations, calculates the winnings, and returns the response in a Result structure.
 func (g *Game) GetResult(ReqResult *ReqResult) (*Result, error) {
-	//func (g *Game) GetResult(Configname_reels, Configname_lines, Configname_payouts string) (*Result, error) {
 	Config_reels, ok := g.Configs_reels.Map[ReqResult.Config_reels_name]
 	if !ok {
 		return nil, errors.New("Config reels not exists")
@@ -95,7 +103,6 @@ func (g *Game) GetResult(ReqResult *ReqResult) (*Result, error) {
 
 		for j := 0; j < len(Line.Positions); j++ {
 			Result.symbols[i][j] = Config_reels.Reels[Line.Positions[j].Row][Line.Positions[j].Col]
-			//Config_reels.Reels[Line.Positions[j].row][Line.Positions[j].col]
 			if j == 0 {
 				curSymbol = Result.symbols[i][j]
 				countSameSymbols = 0
@@ -123,7 +130,5 @@ func (g *Game) GetResult(ReqResult *ReqResult) (*Result, error) {
 
 	}
 
-	//Result := &Result{Lines: make([]*LineResult, len(Config_lines.Lines))}
 	return &Result, nil
-
 }

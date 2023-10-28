@@ -5,6 +5,8 @@ import (
 	"time"
 )
 
+// The Observer method serves as a middleware that measures the request
+// processing time and forwards the data to the 'metrics' package.
 func (h *APIHandler) Observer(inner http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 

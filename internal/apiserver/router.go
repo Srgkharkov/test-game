@@ -19,6 +19,7 @@ type Route struct {
 
 type Routes []Route
 
+// The NewRouter function initializes the router, repository, and also initializes and defines handlers for the endpoints.
 func NewRouter(game *game.Game, metrics *metrics.Metrics) *mux.Router {
 	h := NewAPIHandler(game, metrics)
 
@@ -37,14 +38,6 @@ func NewRouter(game *game.Game, metrics *metrics.Metrics) *mux.Router {
 			h.AddConfig,
 		},
 
-		//Route{
-		//	"GetMetrics",
-		//	strings.ToUpper("Get"),
-		//	"/metrics",
-		//	//h.GetMetrics,
-		//	h.Index,
-		//},
-
 		Route{
 			"GetResult",
 			strings.ToUpper("Post"),
@@ -54,7 +47,7 @@ func NewRouter(game *game.Game, metrics *metrics.Metrics) *mux.Router {
 	}
 
 	router := mux.NewRouter().StrictSlash(true)
-	//router.han
+
 	for _, route := range routes {
 		var handler http.Handler
 		handler = route.HandlerFunc
@@ -77,11 +70,13 @@ func NewRouter(game *game.Game, metrics *metrics.Metrics) *mux.Router {
 	return router
 }
 
+// The APIHandler structure includes a repository for the handlers.
 type APIHandler struct {
 	game    *game.Game
 	metrics *metrics.Metrics
 }
 
+// The NewAPIHandler function initializes the repository for the handlers.
 func NewAPIHandler(game *game.Game, metrics *metrics.Metrics) (h *APIHandler) {
 	return &APIHandler{
 		game:    game,

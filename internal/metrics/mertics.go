@@ -4,12 +4,14 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 )
 
+// Metrics contains Prometheus counters.
 type Metrics struct {
 	RequestsTotal      *prometheus.Counter
 	ErrorResponseTotal *prometheus.Counter
 	RequestDuration    *prometheus.Histogram
 }
 
+// NewMetrics initializes Prometheus counters.
 func NewMetrics() *Metrics {
 	requestsTotal := prometheus.NewCounter(
 		prometheus.CounterOpts{
@@ -37,6 +39,7 @@ func NewMetrics() *Metrics {
 	}
 }
 
+// The Run method registers Prometheus counters.
 func (m *Metrics) Run() {
 	prometheus.MustRegister(*m.RequestsTotal, *m.ErrorResponseTotal, *m.RequestDuration)
 }
