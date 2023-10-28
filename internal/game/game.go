@@ -1,7 +1,6 @@
 package game
 
 import (
-	"encoding/json"
 	"errors"
 )
 
@@ -37,11 +36,6 @@ func (c *Configs_reels) AddConfig(Config_reels *Config_reels) error {
 	c.Configs = append(c.Configs, Config_reels)
 	c.Map[Config_reels.Name] = Config_reels
 	return nil
-}
-
-func (c *Config_reels) UnmarshalJSON(b []byte) error {
-	//a := []interface{}{&t.count, &t.name, &t.relation}
-	return json.Unmarshal(b, &c)
 }
 
 func (c *Configs_lines) AddConfig(Config_lines *Config_lines) error {
