@@ -5,6 +5,10 @@ build:
 run:
 	go run ./cmd/main.go
 
+test:
+	go test -v ./internal/game
+	go test -v ./internal/apiserver
+
 testresult:
 
 	curl -X POST -H 'Content-Type:multipart/form-data' -F conftype=reels -F confname=confreels -F config=@test/confreels.json localhost:8080/addconfig

@@ -15,6 +15,6 @@ type APIServer struct {
 	Router *mux.Router
 }
 
-func (s *APIServer) Run() error {
-	return http.ListenAndServe(":8080", s.Router)
+func (s *APIServer) Run(addr string) error {
+	return http.ListenAndServe(addr, s.Router)
 }

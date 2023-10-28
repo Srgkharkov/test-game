@@ -12,7 +12,7 @@ func main() {
 	metrics := metrics.NewMetrics()
 	metrics.Run()
 	APIServer := apiserver.NewAPIServer(game, metrics)
-	if err := APIServer.Run(); err != nil {
+	if err := APIServer.Run(":8080"); err != nil {
 		log.Fatal(err)
 	}
 }

@@ -24,5 +24,8 @@ jobs:
     - name: Build
       run: go build -v cmd/main.go
 
-    - name: Test
+    - name: Test package game
       run: go test -v ./internal/game/
+
+    - name: Test API handlers
+      run: go test -v ./internal/apiserver/
