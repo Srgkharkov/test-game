@@ -14,6 +14,7 @@ Test Reels Game requires [Golang](https://go.dev/doc/install) v1.21+ to run.
 
 ```sh
 git clone github.com/Srgkharkov/test-game
+cd test-game
 make build
 ```
 <!--- Import a HTML file and watch it magically convert to Markdown-->
@@ -26,13 +27,13 @@ make build
 <!--that people naturally use in email.-->
 <!--As [John Gruber] writes on the [Markdown site][df1]-->
 
-<!--> The overriding design goal for Markdown's-->
-<!--> formatting syntax is to make it as readable-->
-<!--> as possible. The idea is that a-->
-<!--> Markdown-formatted document should be-->
-<!--> publishable as-is, as plain text, without-->
-<!--> looking like it's been marked up with tags-->
-<!--> or formatting instructions.-->
+<!-- The overriding design goal for Markdown's-->
+<!-- formatting syntax is to make it as readable-->
+<!-- as possible. The idea is that a-->
+<!-- Markdown-formatted document should be-->
+<!-- publishable as-is, as plain text, without-->
+<!-- looking like it's been marked up with tags-->
+<!-- or formatting instructions.-->
 
 <!--This text you see here is *actually- written in Markdown! To get a feel-->
 <!--for Markdown's syntax, type some text into the left window and-->
@@ -74,14 +75,17 @@ your preferred browser.
 | POST       | /getresult           | To getting result by Config_reels_name, Config_lines_name and Config_payouts_name | application/json    |
 | GET        | /metrics             | To retrieve prometheus metrics                                                    |                     |
 
-### /addconfig
+### POST Request /addconfig
+Body must containt three arduments:
+
 | Name     | Type | Value                                                                                                  |
 |----------|------|--------------------------------------------------------------------------------------------------------|
 | conftype | Key  | "reels", "lines" or "payouts"                                                                          |
 | confname | Key  | Name of config                                                                                         |
 | config   | File | A file containing JSON, for example: test/confreels.json, test/conflines.json or test/confpayouts.json |
 
-### /getresult
+### POST Request /getresult
+Body must containt JSON:
 ```json
 {
     "conf_reels_name" : "confreels_1",
@@ -97,93 +101,156 @@ MIT
 
 
 
-Dillinger uses a number of open source projects to work properly:
+[//]: # (Dillinger uses a number of open source projects to work properly:)
 
-- [AngularJS] - HTML enhanced for web apps!
-- [Ace Editor] - awesome web-based text editor
-- [markdown-it] - Markdown parser done right. Fast and easy to extend.
-- [Twitter Bootstrap] - great UI boilerplate for modern web apps
-- [node.js] - evented I/O for the backend
-- [Express] - fast node.js network app framework [@tjholowaychuk]
-- [Gulp] - the streaming build system
-- [Breakdance](https://breakdance.github.io/breakdance/) - HTML
-  to Markdown converter
-- [jQuery] - duh
+[//]: # ()
+[//]: # (- [AngularJS] - HTML enhanced for web apps!)
 
-And of course Dillinger itself is open source with a [public repository][dill]
-on GitHub.
+[//]: # (- [Ace Editor] - awesome web-based text editor)
 
-## Installation
+[//]: # (- [markdown-it] - Markdown parser done right. Fast and easy to extend.)
 
-Dillinger requires [Node.js](https://nodejs.org/) v10+ to run.
+[//]: # (- [Twitter Bootstrap] - great UI boilerplate for modern web apps)
 
-Install the dependencies and devDependencies and start the server.
+[//]: # (- [node.js] - evented I/O for the backend)
 
-```sh
-cd dillinger
-npm i
-node app
-```
+[//]: # (- [Express] - fast node.js network app framework [@tjholowaychuk])
 
-For production environments...
+[//]: # (- [Gulp] - the streaming build system)
 
-```sh
-npm install --production
-NODE_ENV=production node app
-```
+[//]: # (- [Breakdance]&#40;https://breakdance.github.io/breakdance/&#41; - HTML)
 
-## Plugins
+[//]: # (  to Markdown converter)
 
-Dillinger is currently extended with the following plugins.
-Instructions on how to use them in your own application are linked below.
+[//]: # (- [jQuery] - duh)
 
-| Plugin | README |
-| ------ | ------ |
-| Dropbox | [plugins/dropbox/README.md][PlDb] |
-| GitHub | [plugins/github/README.md][PlGh] |
-| Google Drive | [plugins/googledrive/README.md][PlGd] |
-| OneDrive | [plugins/onedrive/README.md][PlOd] |
-| Medium | [plugins/medium/README.md][PlMe] |
-| Google Analytics | [plugins/googleanalytics/README.md][PlGa] |
+[//]: # ()
+[//]: # (And of course Dillinger itself is open source with a [public repository][dill])
 
-## Development
+[//]: # (on GitHub.)
 
-Want to contribute? Great!
+[//]: # ()
+[//]: # (## Installation)
 
-Dillinger uses Gulp + Webpack for fast developing.
-Make a change in your file and instantaneously see your updates!
+[//]: # ()
+[//]: # (Dillinger requires [Node.js]&#40;https://nodejs.org/&#41; v10+ to run.)
 
-Open your favorite Terminal and run these commands.
+[//]: # ()
+[//]: # (Install the dependencies and devDependencies and start the server.)
 
-First Tab:
+[//]: # ()
+[//]: # (```sh)
 
-```sh
-node app
-```
+[//]: # (cd dillinger)
 
-Second Tab:
+[//]: # (npm i)
 
-```sh
-gulp watch
-```
+[//]: # (node app)
 
-(optional) Third:
+[//]: # (```)
 
-```sh
-karma test
-```
+[//]: # ()
+[//]: # (For production environments...)
 
-#### Building for source
+[//]: # ()
+[//]: # (```sh)
 
-For production release:
+[//]: # (npm install --production)
 
-```sh
-gulp build --prod
-```
+[//]: # (NODE_ENV=production node app)
 
-Generating pre-built zip archives for distribution:
+[//]: # (```)
 
-```sh
-gulp build dist --prod
-```
+[//]: # ()
+[//]: # (## Plugins)
 
+[//]: # ()
+[//]: # (Dillinger is currently extended with the following plugins.)
+
+[//]: # (Instructions on how to use them in your own application are linked below.)
+
+[//]: # ()
+[//]: # (| Plugin | README |)
+
+[//]: # (| ------ | ------ |)
+
+[//]: # (| Dropbox | [plugins/dropbox/README.md][PlDb] |)
+
+[//]: # (| GitHub | [plugins/github/README.md][PlGh] |)
+
+[//]: # (| Google Drive | [plugins/googledrive/README.md][PlGd] |)
+
+[//]: # (| OneDrive | [plugins/onedrive/README.md][PlOd] |)
+
+[//]: # (| Medium | [plugins/medium/README.md][PlMe] |)
+
+[//]: # (| Google Analytics | [plugins/googleanalytics/README.md][PlGa] |)
+
+[//]: # ()
+[//]: # (## Development)
+
+[//]: # ()
+[//]: # (Want to contribute? Great!)
+
+[//]: # ()
+[//]: # (Dillinger uses Gulp + Webpack for fast developing.)
+
+[//]: # (Make a change in your file and instantaneously see your updates!)
+
+[//]: # ()
+[//]: # (Open your favorite Terminal and run these commands.)
+
+[//]: # ()
+[//]: # (First Tab:)
+
+[//]: # ()
+[//]: # (```sh)
+
+[//]: # (node app)
+
+[//]: # (```)
+
+[//]: # ()
+[//]: # (Second Tab:)
+
+[//]: # ()
+[//]: # (```sh)
+
+[//]: # (gulp watch)
+
+[//]: # (```)
+
+[//]: # ()
+[//]: # (&#40;optional&#41; Third:)
+
+[//]: # ()
+[//]: # (```sh)
+
+[//]: # (karma test)
+
+[//]: # (```)
+
+[//]: # ()
+[//]: # (#### Building for source)
+
+[//]: # ()
+[//]: # (For production release:)
+
+[//]: # ()
+[//]: # (```sh)
+
+[//]: # (gulp build --prod)
+
+[//]: # (```)
+
+[//]: # ()
+[//]: # (Generating pre-built zip archives for distribution:)
+
+[//]: # ()
+[//]: # (```sh)
+
+[//]: # (gulp build dist --prod)
+
+[//]: # (```)
+
+[//]: # ()
